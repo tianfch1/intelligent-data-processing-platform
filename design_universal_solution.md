@@ -146,7 +146,7 @@ class FinancialReportAnalyzer:
 - 编程语言: Python 3.9+
 - Web框架: FastAPI
 - 数据库: MySQL + Redis
-- 消息队列: RabbitMQ
+- 任务队列: Celery + Redis (轻量级异步处理)
 - 容器化: Docker
 
 # AI/ML技术栈
@@ -175,7 +175,25 @@ class UniversalDataModel:
     - 成本统计管理
 ```
 
-### 4.3 配置化引擎
+### 4.3 技术选型说明
+```python
+# 技术选型原则
+class TechnologySelection:
+    - 简化优先: 避免过度设计，专注核心功能
+    - 成本控制: 降低运维复杂度和服务器成本
+    - 快速迭代: 支持敏捷开发和快速上线
+    - 可扩展性: 支持业务增长的技术演进
+
+# 任务队列选择: Celery + Redis
+选择理由:
+- 轻量级: 相比RabbitMQ更简单，运维成本低
+- 成熟稳定: Python生态中广泛使用
+- 功能足够: 满足异步任务处理需求
+- 易于调试: 问题排查和监控更简单
+- 成本效益: 复用Redis，无需额外组件
+```
+
+### 4.4 配置化引擎
 ```python
 # 可配置的处理引擎
 class ConfigurableEngine:
@@ -240,13 +258,14 @@ class CostOptimization:
 
 ### 6.1 部署架构
 ```yaml
-# 微服务架构
+# 简化微服务架构
 services:
   - data-connector-service    # 数据接入服务
   - preprocessor-service      # 数据预处理服务
   - analyzer-service          # 智能分析服务
   - knowledge-service         # 知识管理服务
   - result-service           # 结果处理服务
+  - celery-worker            # 异步任务处理
   - api-gateway              # API网关
   - web-frontend             # 前端界面
   - admin-console            # 管理控制台
@@ -258,9 +277,15 @@ services:
 - 负载均衡: Nginx + HAProxy
 - 服务发现: Consul
 - 配置管理: Apollo
+- 任务队列: Celery + Redis (支持水平扩展)
 - 监控告警: Prometheus + Grafana
 - 日志管理: ELK Stack
 - 链路追踪: Jaeger
+
+# 扩展策略
+- 初期: 单机部署，Celery + Redis
+- 中期: 多机部署，Redis集群
+- 后期: 根据业务量考虑引入RabbitMQ
 ```
 
 ### 6.3 安全方案
@@ -327,10 +352,11 @@ services:
 # 基础平台建设
 - 数据接入和处理引擎
 - GPT-4大模型集成
-- 基础API服务
+- FastAPI + Celery异步处理
 - 用户管理系统
 - 简单可视化界面
 - 成本控制机制
+- Redis缓存和任务队列
 ```
 
 ### 8.2 第二阶段：场景扩展（6个月）
